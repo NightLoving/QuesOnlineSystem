@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.dao.UserDao">
+    <resultMap id="userResult" type="project.entity.User">
+        <id property="userId" column="user_id"></id>
+        <result property="username" column="username"></result>
+        <result property="password" column="password_md5"></result>
+        <result property="rightNumber" column="right_number"></result>
+        <result property="totalNumber" column="total_number"></result>
+        <result property="points" column="points"></result>
+        <result property="userToken" column="user_token"></result>
+    </resultMap>
+
+<!--    addUser-->
+    <insert id="addUser" parameterType="project.entity.User">
+        insert into tb_user(username,password_md5)
+        values(#{username},#{password})
+    </insert>
+
+<!--    getUserByUsernameAndPassword-->
+    <select id="getUserByUsernameAndPassword" resultMap="userResult">
+        select * from tb_user
+        where username=#{username} and password_md5=#{password}
+        order by user_id desc limit 1
+    </select>
+
+<!--    getUserByToken-->
+    <select id="getUserByToken" resultMap="userResult">
+        select * from tb_user
+        where user_Token=#{userToken}
+        order by user_id desc limit 1
+    </select>
+
+<!--    getUserById-->
+    <select id="getUserById" resultMap="userResult">
+        select * from tb_user
+        where user_id=#{userId}
+    </select>
+
+    <select id="getUserByUsername" resultMap="userResult">
+        select * from tb_user
+        where username=#{username}
+        order by user_id desc limit 1
+    </select>
+
+    <update id="updateUserPassword">
+        update tb_user set password_md5=#{newPassword}
+        where user_id=#{userId}
+    </update>
+    
+    <update id="updateUserToken">
+        update tb_user set user_token = #{newToken}
+        where user_id = #{userId}
+    </update>
+
+    <select id="getAllUsers" resultMap="userResult">
+        select * from tb_user
+        order by user_id
+    </select>
+
+    <select id="findUsers" parameterType="Map" resultMap="userResult">
+        select * from tb_user
+        order by user_id
+        <if test="start!=null and limit!=null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getTotalUser" resultType="Long">
+        select count(*) from tb_user
+    </select>
+</mapper>

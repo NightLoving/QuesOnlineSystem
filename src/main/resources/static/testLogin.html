@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="plugins/jquery/jquery.min.js"></script>
+</head>
+<body>
+<input id="username" type="text">
+<input id="password" type="password">
+<input type="button" value="submit" onclick="login()">
+<script>
+    function login(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var data = {"username": username, "password": password}
+        $.ajax({
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/login",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: function (result) {}
+        });
+    }
+</script>
+
+</body>
+</html>
